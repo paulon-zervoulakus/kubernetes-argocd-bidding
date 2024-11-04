@@ -1,0 +1,90 @@
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: ui-configmap
+#   namespace: bidding-app
+#   annotations:
+#     deployment.kubernetes.io/revision: "1.0.2"
+#     description: "Changes for ingress"
+# data:
+#   api_url: "http://api.bidding.local"
+#   ui_port: "80"
+#   api_port: "80"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: bidding-app
+  name: deployment-ui
+  labels:
+    app: deployment-ui
+  annotations:
+    deployment.kubernetes.io/revision: "1.0.0"
+    description: "Initial build"
+spec:
+  replicas: 1 # Number of pod replicas
+  selector:
+    matchLabels:
+      app: deployment-ui # Label to identify pods managed by this deployment
+  template:
+    metadata:
+      labels:
+        app: deployment-ui # Labels for the pod
+    spec:
+      containers:
+        - name: deployment-ui-container
+          image: paulonzervoulakus/subasta-ui:v1.0.4 # Replace with your application image
+          ports:
+            - containerPort: 80 # Port that the container listens on
+
+          # env: # Environment variables (optional)
+          #   - name: VITE_API_URL
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: ui-configmap
+          #         key: api_url
+          #   - name: VITE_UI_PORT
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: ui-configmap
+          #         key: ui_port
+
+      # Optional: Resource limits
+      # resources:
+      #   requests:
+      #     memory: "64Mi"
+      #     cpu: "250m"
+      #   limits:
+      #     memory: "128Mi"
+      #     cpu: "500m"
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   namespace: bidding-app
+#   name: service-ui-external
+#   labels:
+#     app: service-ui-external
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: deployment-ui
+#   ports:
+#     - protocol: TCP
+#       port: 3000
+#       targetPort: 80
+#       nodePort: 30100
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: bidding-app
+  name: service-ui-internal
+  labels:
+    app: service-ui-internal
+spec:
+  selector:
+    app: deployment-ui
+  ports:
+    - port: 3000
+      targetPort: 80

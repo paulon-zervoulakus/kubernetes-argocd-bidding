@@ -1,0 +1,120 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: api-configmap
+  namespace: bidding-app
+data:
+  db_host: service-mssql-internal
+  db_name: "bidding"
+  db_userid: "SA"
+  db_port: "1434"
+  api_port: "80"
+  ui_port: "80"
+  ui_host: "bidding.local"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: bidding-app
+  name: deployment-api
+  labels:
+    app: deployment-api
+  annotations:
+    deployment.kubernetes.io/revision: "1.0.0"
+    description: "Initialize"
+spec:
+  replicas: 1 # Number of pod replicas
+  selector:
+    matchLabels:
+      app: deployment-api # Label to identify pods managed by this deployment
+  template:
+    metadata:
+      labels:
+        app: deployment-api # Labels for the pod
+    spec:
+      containers:
+        - name: deployment-api-container
+          image: paulonzervoulakus/subasta-api:v1.0.4 # Replace with your application image
+          ports:
+            - containerPort: 8080 # Port that the container listens on
+          env: # Environment variables (optional)
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: api-configmap
+                  key: db_host
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: api-configmap
+                  key: db_name
+            - name: DB_USERID
+              valueFrom:
+                configMapKeyRef:
+                  name: api-configmap
+                  key: db_userid
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql-secret
+                  key: DB_PASSWORD
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: api-configmap
+                  key: db_port
+            - name: API_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: api-configmap
+                  key: api_port
+            - name: UI_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: api-configmap
+                  key: ui_port
+            - name: UI_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: api-configmap
+                  key: ui_host
+            - name: DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
+              value: "false"
+      # Optional: Resource limits
+      # resources:
+      #   requests:
+      #     memory: "64Mi"
+      #     cpu: "250m"
+      #   limits:
+      #     memory: "128Mi"
+      #     cpu: "500m"
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   namespace: bidding-app
+#   name: service-api-external
+#   labels:
+#     app: service-api-external
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: deployment-api
+#   ports:
+#     - port: 8000
+#       targetPort: 8080
+#       nodePort: 30200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: bidding-app
+  name: service-api-internal
+  labels:
+    app: service-api-internal
+spec:
+  selector:
+    app: deployment-api
+  ports:
+    - port: 8000
+      targetPort: 8080
