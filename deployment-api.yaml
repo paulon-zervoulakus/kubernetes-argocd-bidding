@@ -32,6 +32,15 @@ spec:
       labels:
         app: deployment-api # Labels for the pod
     spec:
+      readinessProbe:
+        tcpSocket:
+          port: 1433 # The port your API container listens on
+        initialDelaySeconds: 10
+        periodSeconds: 10
+        timeoutSeconds: 3
+        successThreshold: 1
+        failureThreshold: 3
+
       containers:
         - name: deployment-api-container
           image: paulonzervoulakus/subasta-api:v1.0.4 # Replace with your application image
