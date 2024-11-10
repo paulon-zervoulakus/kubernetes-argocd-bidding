@@ -6,13 +6,13 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: nginx
-  tls:
-    - hosts:
-        - api.bidding.local
-      secretName: my-tls-secret
-    - hosts:
-        - bidding.local
-      secretName: my-tls-secret
+  # tls:
+  #   - hosts:
+  #       - api.bidding.local
+  #     secretName: my-tls-secret
+  #   - hosts:
+  #       - bidding.local
+  #     secretName: my-tls-secret
   rules:
     - host: api.bidding.local
       http:
