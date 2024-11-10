@@ -11,3 +11,4 @@ spec:
   commonName: bidding.local
   dnsNames:
     - bidding.local
+    - api.bidding.local
