@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-api-ui
+  name: ingress-api
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -25,6 +25,20 @@ spec:
                 port:
                   number: 8000
 
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-ui
+  annotations:
+
+spec:
+  ingressClassName: nginx
+  # tls:
+  #   - hosts:
+  #       - bidding.local
+  #     secretName: my-tls-secret
+  rules:
     - host: bidding.local
       http:
         paths:
@@ -35,27 +49,3 @@ spec:
                 name: service-ui-internal
                 port:
                   number: 3000
----
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: ingress-ui
-#   annotations:
-
-# spec:
-#   ingressClassName: nginx
-#   tls:
-#     - hosts:
-#         - bidding.local
-#       secretName: my-tls-secret
-#   rules:
-#     - host: bidding.local
-#       http:
-#         paths:
-#           - path: /
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: service-ui-internal
-#                 port:
-#                   number: 3000
