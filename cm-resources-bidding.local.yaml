@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: my-cert
+  namespace: bidding-app # or the namespace of your application
+spec:
+  secretName: my-tls-secret
+  issuerRef:
+    name: letsencrypt-issuer
+    kind: ClusterIssuer
+  commonName: bidding.local
+  dnsNames:
+    - bidding.local
