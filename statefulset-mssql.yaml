@@ -53,9 +53,9 @@ spec:
                   name: mssql-secret
                   key: DB_PASSWORD
 
-          # volumeMounts:
-          #   - name: mssql-persistent-storage
-          #     mountPath: /var/opt/mssql # Mount MSSQL data directory to persistent storage
+          volumeMounts:
+            - name: mssql-persistent-storage
+              mountPath: /var/opt/mssql # Mount MSSQL data directory to persistent storage
           command:
             - /bin/bash
             - -c
@@ -77,14 +77,14 @@ spec:
             timeoutSeconds: 3
             successThreshold: 1
             failureThreshold: 5
-  # volumeClaimTemplates:
-  #   - metadata:
-  #       name: mssql-persistent-storage
-  #     spec:
-  #       accessModes: ["ReadWriteOnce"]
-  #       resources:
-  #         requests:
-  #           storage: 10Gi # Define the size of the persistent storage (adjust as needed)
+  volumeClaimTemplates:
+    - metadata:
+        name: mssql-persistent-storage
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 10Gi # Define the size of the persistent storage (adjust as needed)
 ---
 apiVersion: v1
 kind: Service
