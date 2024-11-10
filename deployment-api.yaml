@@ -30,7 +30,7 @@ spec:
     metadata:
       labels:
         app: deployment-api # Labels for the pod
-
+    spec:
       containers:
         - name: deployment-api-container
           image: paulonzervoulakus/subasta-api:v1.0.4.5-beta
