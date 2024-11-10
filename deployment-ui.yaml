@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: deployment-ui-container
-          image: paulonzervoulakus/subasta-ui:v1.0.4.3
+          image: paulonzervoulakus/subasta-ui:v1.0.4.3-beta
           ports:
             - containerPort: 80 # Port that the container listens on
 
