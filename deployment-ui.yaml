@@ -19,7 +19,6 @@ metadata:
   labels:
     app: deployment-ui
   annotations:
-    deployment.kubernetes.io/revision: "1.0.0"
     description: "Initial build"
 spec:
   replicas: 1 # Number of pod replicas
