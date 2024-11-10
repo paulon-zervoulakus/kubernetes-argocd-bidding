@@ -67,7 +67,7 @@ spec:
           readinessProbe:
             exec:
               command:
-                - sh
+                - /bin/bash
                 - -c
                 - |
                   echo "Debugging: MSSQL_SA_PASSWORD=$MSSQL_SA_PASSWORD" &&
