@@ -33,7 +33,7 @@ spec:
     spec:
       containers:
         - name: deployment-api-container
-          image: paulonzervoulakus/subasta-api:v1.0.5.2-beta
+          image: paulonzervoulakus/subasta-api:v1.0.5.3-beta
           ports:
             - containerPort: 8080 # Port that the container listens on
           env: # Environment variables (optional)
