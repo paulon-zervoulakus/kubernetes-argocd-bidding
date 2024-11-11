@@ -8,8 +8,8 @@ data:
   db_name: "bidding"
   db_userid: "SA"
   db_port: "1434"
-  api_port: "80"
-  ui_port: "80"
+  api_port: "443"
+  ui_port: "443"
   ui_host: "bidding.local"
 ---
 apiVersion: apps/v1
